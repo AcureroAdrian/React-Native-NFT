@@ -1,20 +1,40 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import Home from './src/screens/Home';
+import Details from './src/screens/Details';
 
-export default function App() {
+const Stack = createStackNavigator()
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: "transparent"
+  }
+}
+
+const App = () => {
+  const [loaded] = useFonts({
+    InterBold: require('./src/assets/fonts/Inter-Bold.ttf'),
+    InterSemiBold: require('./src/assets/fonts/Inter-SemiBold.ttf'),
+    InterMedium: require('./src/assets/fonts/Inter-Medium.ttf'),
+    InterRegular: require('./src/assets/fonts/Inter-Regular.ttf'),
+    InterLight: require('./src/assets/fonts/Inter-Light.ttf'),
+  })
+
+  if(!loaded) return null;
+
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer theme={theme}>
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
+        <Stack.Screen name='Home' component={Home}/>
+        <Stack.Screen name='Details' component={Details}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
